@@ -17,8 +17,29 @@ class PDFCompressorService:
         try:
             doc = fitz.open(input_path)
             
-            # 使用基本的优化配置进行保存（可根据具体 compression_level 定制不同的 garbage 级别或图像重采样策略）
             garbage_level = 3 if compression_level == 1 else 4
+            
+            if compression_level >= 2:
+                # 去除隐藏的元数据和无用信息
+                if hasattr(doc, "scrub"):
+                    doc.scrub()
+                
+                # 裁剪仅使用到的字体集
+                if hasattr(doc, "subset_fonts"):
+                    try:
+                        doc.subset_fonts()
+                    except Exception as e:
+                        logger.warning(f"Font subsetting skipped: {e}")
+                
+                # 图片重采样降质以大幅度压缩文件
+                if hasattr(doc, "rewrite_images"):
+                    # Level 2 适中压缩; Level 3极限压缩
+                    dpi = 150 if compression_level == 2 else 72
+                    quality = 75 if compression_level == 2 else 50
+                    try:
+                        doc.rewrite_images(dpi_threshold=dpi + 10, dpi_target=dpi, quality=quality)
+                    except Exception as e:
+                        logger.warning(f"Image rewriting skipped: {e}")
             
             doc.save(
                 output_path, 
