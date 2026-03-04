@@ -39,15 +39,24 @@
 在 OpenClaw (或 ClawHub) 的技能管理面板中：
 1. 点击 **"上传技能包 / Upload Skill"**
 2. 选中刚才生成的 `pdf_compressor_skill.zip`
-3. 平台会自动读取 `skill.yaml` 并安装 `requirements.txt` 中的依赖。
+3. 平台会自动读取 `pyproject.toml` / `uv.lock` 并通过 `uv` 安装依赖。
 
 ### 2. 使用 PyInstaller 构建独立可执行文件（高阶）
 如果希望降低目标环境对 Python 环境及依赖派发的处理成本，可以打包为单独的二进制文件。
-1. 安装 PyInstaller: `pip install pyinstaller`
-2. 运行打包: `pyinstaller --onefile src/main.py -n pdf_compressor`
-3. 修改 `skill.yaml`:
+1. 安装并在虚拟环境中通过 uv 运行: `uv run pyinstaller --onefile src/main.py -n pdf_compressor`
+2. 修改 `SKILL.md` 的 metadata:
    ```yaml
    runtime: executable
-   entrypoint: "./dist/pdf_compressor"
    ```
-4. 将 `dist/pdf_compressor` 和 `skill.yaml` 打包发布。
+3. 将 `dist/pdf_compressor` 和 `SKILL.md` 打包发布。
+
+## 开发者本地运行
+本项目使用 [`uv`](https://github.com/astral-sh/uv) 进行 Python 依赖管理和环境隔离。
+
+```bash
+# 安装依赖并同步环境
+uv sync
+
+# 本地运行测试
+uv run src/main.py --pdf_path "/path/to/test.pdf" --compression_level 2
+```

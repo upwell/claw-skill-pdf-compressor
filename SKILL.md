@@ -2,8 +2,8 @@
 name: pdf_compressor
 description: "Compresses a given PDF file to reduce its size."
 version: "1.0.0"
-runtime: python
-entrypoint: "src/main.py"
+runtime: shell
+entrypoint: "uv run src/main.py"
 
 inputs:
   - name: pdf_path

@@ -11,11 +11,16 @@ cd "$DIR"
 echo "🧹 Cleaning up old builds..."
 rm -rf build/ dist/ *.egg-info .pytest_cache __pycache__ src/__pycache__ pdf_compressor_skill.zip
 
+# 同步依赖并生成 lock 文件
+echo "🔒 Running uv lock to ensure dependencies are resolved..."
+uv lock
+
 # 创建发布压缩包
 echo "📦 Creating release package (pdf_compressor_skill.zip)..."
 zip -r pdf_compressor_skill.zip \
     SKILL.md \
-    requirements.txt \
+    pyproject.toml \
+    uv.lock \
     README.md \
     src/ \
     -x "*/__pycache__/*" "*/.DS_Store" "*/.pytest_cache/*"
