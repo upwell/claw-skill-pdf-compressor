@@ -14,7 +14,7 @@ rm -rf build/ dist/ *.egg-info .pytest_cache __pycache__ src/__pycache__ pdf_com
 # 创建发布压缩包
 echo "📦 Creating release package (pdf_compressor_skill.zip)..."
 zip -r pdf_compressor_skill.zip \
-    skill.yaml \
+    SKILL.md \
     requirements.txt \
     README.md \
     src/ \
