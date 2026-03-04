@@ -1,0 +1,7 @@
+venv/
+__pycache__/
+*.pyc
+.DS_Store
+*.pdf
+pdf_compressor_skill.zip
+# 允许提交保留的文件，比如 samples/xxx.pdf 或者 tests 里面的，具体可自行放开
